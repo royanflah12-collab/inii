@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Ultra Cinematic V3</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{overflow:hidden;background:#000;color:#fff;font-family:Poppins,sans-serif}
+canvas{position:fixed;inset:0}
+.screen{position:fixed;inset:0}
+#loader{display:flex;justify-content:center;align-items:center;font:5rem 'Great Vibes';background:#000;z-index:9999;animation:fade 4s forwards}
+@keyframes fade{80%{opacity:1}100%{opacity:0;visibility:hidden}}
+#intro,#ending{display:flex;justify-content:center;align-items:center;flex-direction:column;text-align:center}
+.title{font:5rem 'Great Vibes';text-shadow:0 0 40px #ff66cc}
+#start{margin-top:25px;padding:18px 35px;border-radius:30px;border:none;background:rgba(255,255,255,.15);color:#fff;backdrop-filter:blur(20px)}
+#movie,#ending{display:none}
+#bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.3);transition:2s}
+.overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9),rgba(0,0,0,.2))}
+.center{position:absolute;inset:0;display:flex;justify-content:center;align-items:center;padding:40px}
+#caption{font-size:2.3rem;max-width:950px;text-align:center;text-shadow:0 0 25px #000}
+.card{padding:45px;border-radius:30px;background:rgba(255,255,255,.08);backdrop-filter:blur(25px)}
+.name{font:5rem 'Great Vibes';background:linear-gradient(90deg,#ff66cc,#ffd700,#ff66cc);background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shine 4s linear infinite}
+@keyframes shine{to{background-position:300%}}
+</style>
+</head>
+<body>
+<canvas id="space"></canvas>
+<div id="loader" class="screen">For Anin ❤️</div>
+
+<div id="intro" class="screen">
+<div class="title">Anin ❤️</div>
+<div>Ultra Cinematic Letter</div>
+<button id="start">Open Our Story ✨</button>
+</div>
+
+<div id="movie" class="screen">
+<img id="bg" src="foto1.jpg">
+<div class="overlay"></div>
+<div class="center"><div id="caption"></div></div>
+</div>
+
+<div id="ending" class="screen">
+<div class="card">
+<div class="name">Anin ❤️</div>
+<p style="margin-top:20px">Some people become memories. Some become stories. You became both.</p>
+<p style="margin-top:10px">Thank you for every smile, laugh, and moment.</p>
+<h2 style="margin-top:20px">✨ Forever In My Memories ✨</h2>
+<p style="margin-top:20px">❤️ Royan ❤️</p>
+</div>
+</div>
+
+<audio id="music" loop><source src="lagu.mp3"></audio>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script>
+const c=space,x=c.getContext('2d');
+function rs(){c.width=innerWidth;c.height=innerHeight}rs();onresize=rs;
+let stars=[...Array(700)].map(()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2}));
+function draw(){
+x.fillStyle='rgba(0,0,0,.2)';x.fillRect(0,0,c.width,c.height);
+stars.forEach(s=>{x.fillStyle='white';x.beginPath();x.arc(s.x,s.y,s.r,0,6.28);x.fill();s.y+=0.15;if(s.y>c.height)s.y=0;});
+requestAnimationFrame(draw);
+}draw();
+
+function meteor(){
+let d=document.createElement('div');
+d.innerHTML='💖';
+d.style='position:fixed;left:'+Math.random()*innerWidth+'px;top:0;font-size:28px;z-index:99';
+document.body.appendChild(d);
+d.animate([{},{transform:'translate(-500px,600px)',opacity:0}],{duration:2500});
+setTimeout(()=>d.remove(),2500);
+}
+setInterval(meteor,2500);
+
+function heartRain(){
+let h=document.createElement('div');
+h.innerHTML='💕';
+h.style='position:fixed;left:'+Math.random()*100+'vw;top:-20px;font-size:22px;z-index:99';
+document.body.appendChild(h);
+h.animate([{},{transform:'translateY(110vh) rotate(360deg)',opacity:0}],{duration:7000});
+setTimeout(()=>h.remove(),7000);
+}
+setInterval(heartRain,500);
+
+const scenes=[
+['foto1.jpg','Semua cerita indah dimulai dari sebuah pertemuan.'],
+['foto2.jpg','Dan tanpa kusadari, kamu menjadi bagian dari banyak kenangan terindah.'],
+['foto3.jpg','Bersamamu, hal sederhana terasa istimewa.'],
+['foto4.jpg','Terima kasih untuk setiap tawa dan cerita.'],
+['foto5.jpg','Mengenalmu adalah sesuatu yang selalu aku syukuri.'],
+['foto6.jpg','Anin ❤️']
+];
+
+function showText(t){
+caption.innerHTML='';
+t.split(' ').forEach((w,i)=>{
+let s=document.createElement('span');
+s.innerText=w+' ';
+s.style.opacity=0;
+s.style.display='inline-block';
+s.style.animation=`r .8s forwards ${i*.12}s`;
+caption.appendChild(s);
+});
+}
+let st=document.createElement('style');
+st.innerHTML='@keyframes r{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}';
+document.head.appendChild(st);
+
+start.onclick=()=>{
+music.play().catch(()=>{});
+intro.style.display='none';
+movie.style.display='block';
+let i=0;
+function scene(){
+bg.style.opacity=0;
+setTimeout(()=>{
+bg.src=scenes[i][0];
+bg.style.opacity=1;
+bg.animate([{transform:'scale(1)'},{transform:'scale(1.2)'}],{duration:8000,fill:'forwards'});
+showText(scenes[i][1]);
+},900);
+}
+scene();
+let tm=setInterval(()=>{
+i++;
+if(i>=scenes.length){
+clearInterval(tm);
+movie.style.display='none';
+ending.style.display='flex';
+confetti({particleCount:500,spread:180});
+return;
+}
+scene();
+},8000);
+};
+</script>
+</body>
+</html>
